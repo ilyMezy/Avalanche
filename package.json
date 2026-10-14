@@ -20,7 +20,7 @@
     "db:generate": "drizzle-kit generate",
     "measure": "node tools/measure-startup.mjs",
     "rebuild": "electron-builder install-app-deps",
-    "dist": "electron-vite build && electron-builder --win --x64 --publish never",
+    "dist": "electron-vite build && electron-builder --mac --publish never",
     "dist:win": "electron-vite build && electron-builder --win --x64 --publish never",
     "dist:mac": "electron-vite build && electron-builder --mac --publish never",
     "dist:linux": "electron-vite build && electron-builder --linux --publish never"
