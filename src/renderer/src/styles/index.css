@@ -1,0 +1,1168 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================================
+   Design tokens
+
+   Every colour in the app comes from the semantic variables below. Components use them
+   through Tailwind utilities (bg-surface, text-muted, border-line, …) defined in @theme.
+   To restyle a theme, change values here; do not hardcode colours in components.
+
+   Surfaces, from back to front:  sidebar < bg < surface < raised (menus, dialogs)
+   Interaction:                   hover < active (selected / pressed)
+   The document page (--page-*) is a separate group because it can differ from the app theme
+   (see .docx-page) and is never used for exported files.
+   ========================================================================================== */
+:root {
+  /* Surfaces */
+  --bg: #ffffff;
+  --sidebar: #fafafa;
+  --surface: #ffffff;
+  --raised: #ffffff;
+  --canvas: #f3f3f5;
+  --hover: #f0f0f2;
+  --active: #e7e7eb;
+  /* Lines */
+  --line: #e9e9ec;
+  --line-strong: #d6d6db;
+  /* Text */
+  --fg: #18181b;
+  --muted: #5e5e68;
+  --subtle: #8d8d97;
+  /* Accent: one restrained colour. --accent is for fills, --accent-text for text and icons. */
+  --accent: #5e6ad2;
+  --accent-hover: #505cc6;
+  --accent-fg: #ffffff;
+  --accent-text: #4752bd;
+  --accent-soft: rgba(94, 106, 210, 0.1);
+  /* Status */
+  --danger: #c63a31;
+  --danger-soft: rgba(198, 58, 49, 0.09);
+  --success: #1c8556;
+  --warning: #9a6408;
+  /* Selection, focus, scrollbars */
+  --selection: rgba(94, 106, 210, 0.24);
+  --focus: #5e6ad2;
+  --scrollbar: #cfcfd5;
+  --scrollbar-hover: #a9a9b2;
+  --shadow: 0 0 0 1px rgba(24, 24, 27, 0.04), 0 10px 32px rgba(24, 24, 27, 0.12), 0 2px 6px rgba(24, 24, 27, 0.06);
+  /* Source editors (Markdown, LaTeX) */
+  --syn-keyword: #7a41c2;
+  --syn-heading: #18181b;
+  --syn-string: #17764e;
+  --syn-comment: #8d8d97;
+  --syn-link: #4752bd;
+  --syn-atom: #a8551c;
+  /* Document page (visual editor only) */
+  --page-bg: #ffffff;
+  --page-fg: #1c1c1f;
+  --page-heading: #2f5496;
+  --page-subheading: #1f3763;
+  --page-link: #0b5cc4;
+  --page-border: #9a9aa2;
+  --page-fill: #f2f2f4;
+  --page-placeholder: #9a9aa2;
+  --page-edge: 0 0 0 1px rgba(24, 24, 27, 0.07), 0 8px 28px rgba(24, 24, 27, 0.08);
+  --pdf-bg: #e9e9ec;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0e0e10;
+  --sidebar: #0b0b0d;
+  --surface: #131316;
+  --raised: #18181c;
+  --canvas: #09090b;
+  --hover: #1b1b20;
+  --active: #24242a;
+  --line: #1e1e23;
+  --line-strong: #2c2c33;
+  --fg: #ececef;
+  --muted: #9c9ca6;
+  --subtle: #6a6a75;
+  --accent: #5e6ad2;
+  --accent-hover: #6d78df;
+  --accent-fg: #ffffff;
+  --accent-text: #9aa3f5;
+  --accent-soft: rgba(116, 128, 236, 0.15);
+  --danger: #ee6a62;
+  --danger-soft: rgba(238, 106, 98, 0.12);
+  --success: #4db684;
+  --warning: #d9a444;
+  --selection: rgba(124, 136, 240, 0.32);
+  --focus: #7c88f0;
+  --scrollbar: #2e2e35;
+  --scrollbar-hover: #44444d;
+  --shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 16px 48px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --syn-keyword: #b594f2;
+  --syn-heading: #f2f2f4;
+  --syn-string: #7ecf9f;
+  --syn-comment: #6a6a75;
+  --syn-link: #9aa3f5;
+  --syn-atom: #e3a16c;
+  /* A deliberate dark writing surface: a step lighter than the canvas so the page still reads
+     as a sheet, with text slightly softer than pure white for long reading. */
+  --page-bg: #17171b;
+  --page-fg: #e3e3e7;
+  --page-heading: #b3bef6;
+  --page-subheading: #9eaae8;
+  --page-link: #8fa3ff;
+  --page-border: #3b3b44;
+  --page-fill: #1f1f25;
+  --page-placeholder: #6a6a75;
+  --page-edge: 0 0 0 1px #24242a, 0 16px 44px rgba(0, 0, 0, 0.5);
+  --pdf-bg: #09090b;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-sidebar: var(--sidebar);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-hover: var(--hover);
+  --color-active: var(--active);
+  --color-canvas: var(--canvas);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-pdf: var(--pdf-bg);
+  --font-sans: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-display: 'Segoe UI Variable Display', 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Cascadia Code', 'Cascadia Mono', Consolas, 'Courier New', monospace;
+  --shadow-pop: var(--shadow);
+}
+
+/* Motion scale: micro-interactions 120–180 ms, panels and dialogs about 240 ms. */
+:root {
+  --dur-fast: 120ms;
+  --dur: 170ms;
+  --dur-slow: 240ms;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  user-select: none;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+}
+
+input,
+textarea,
+.selectable,
+.cm-content,
+.ProseMirror,
+.md-preview {
+  user-select: text;
+}
+
+/* In the base layer so that utilities (for example `outline-none` on inputs that show focus
+   through their border instead) can override it. Unlayered rules would always win. */
+@layer base {
+  *:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+  }
+  button,
+  [role='button'],
+  [role='tab'],
+  [role='radio'],
+  [role='treeitem'],
+  [role='row'],
+  [role='option'] {
+    transition-property: background-color, border-color, color, opacity, box-shadow, transform;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: ease-out;
+  }
+}
+
+::selection {
+  background: var(--selection);
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+}
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Scrollbars follow the theme */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+  background-clip: content-box;
+  border: 2px solid transparent;
+}
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* A toolbar that scrolls sideways keeps a slim scroll bar along its bottom edge. */
+.toolbar-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+.toolbar-scroll::-webkit-scrollbar-thumb,
+.toolbar-scroll::-webkit-scrollbar-thumb:hover {
+  border: 0;
+}
+
+/* ==========================================================================================
+   Motion (CSS part). Overlays built on Radix expose data-state, which drives both the
+   entrance and the dismissal; Radix waits for the exit animation before unmounting.
+   Layout and shared-element motion is done with Motion for React in the components.
+   ========================================================================================== */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.975);
+  }
+}
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(3px) scale(0.985);
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.97);
+  }
+}
+@keyframes pop-out {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.ui-overlay {
+  animation: fade-in var(--dur) ease-out;
+}
+.ui-overlay[data-state='closed'] {
+  animation: fade-out var(--dur-fast) ease-in forwards;
+}
+.ui-dialog {
+  animation: dialog-in var(--dur-slow) var(--ease);
+}
+.ui-dialog[data-state='closed'] {
+  animation: dialog-out var(--dur-fast) ease-in forwards;
+}
+.ui-pop {
+  animation: pop-in var(--dur) var(--ease);
+}
+.ui-pop[data-state='closed'] {
+  animation: pop-out var(--dur-fast) ease-in forwards;
+}
+.animate-fade {
+  animation: fade-in var(--dur) ease-out;
+}
+.animate-rise {
+  animation: rise-in var(--dur-slow) var(--ease);
+}
+
+/* Reduced motion: transitions and animations collapse to an instant change. A tiny duration
+   (rather than `none`) keeps animationend events firing, which Radix relies on to unmount. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================================
+   Source editors (CodeMirror): Markdown and LaTeX
+   ========================================================================================== */
+.cm-editor {
+  height: 100%;
+  background: transparent;
+  color: var(--fg);
+}
+.cm-editor.cm-focused {
+  outline: none;
+}
+.cm-scroller {
+  font-family: var(--font-mono);
+  line-height: 1.65;
+}
+.cm-prose .cm-scroller {
+  font-family: var(--font-sans);
+  line-height: 1.7;
+}
+.cm-prose .cm-content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 36px 140px;
+}
+.cm-gutters {
+  background: transparent !important;
+  border-right: 1px solid var(--line) !important;
+  color: var(--subtle) !important;
+}
+.cm-lineNumbers .cm-gutterElement {
+  padding: 0 10px 0 14px !important;
+  font-variant-numeric: tabular-nums;
+}
+.cm-activeLineGutter {
+  background: transparent !important;
+  color: var(--fg) !important;
+}
+.cm-activeLine {
+  background: color-mix(in srgb, var(--hover) 60%, transparent) !important;
+}
+.cm-prose .cm-activeLine {
+  background: transparent !important;
+}
+.cm-cursor {
+  border-left-color: var(--accent-text) !important;
+  border-left-width: 2px !important;
+}
+.cm-selectionBackground,
+.cm-focused .cm-selectionBackground,
+.cm-content ::selection {
+  background: var(--selection) !important;
+}
+.cm-panels {
+  background: var(--raised) !important;
+  color: var(--fg) !important;
+  border-color: var(--line) !important;
+}
+.cm-panel.cm-search {
+  padding: 6px 8px !important;
+}
+.cm-panel input,
+.cm-panel button,
+.cm-panel label {
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+}
+.cm-textfield {
+  background: var(--bg) !important;
+  border: 1px solid var(--line-strong) !important;
+  border-radius: 5px !important;
+  color: var(--fg) !important;
+}
+.cm-button {
+  background: var(--hover) !important;
+  background-image: none !important;
+  border: 1px solid var(--line-strong) !important;
+  border-radius: 5px !important;
+  color: var(--fg) !important;
+}
+.cm-searchMatch {
+  background: color-mix(in srgb, var(--warning) 32%, transparent) !important;
+}
+.cm-matchingBracket {
+  background: var(--accent-soft) !important;
+  outline: none !important;
+}
+
+/* ==========================================================================================
+   Markdown preview
+   ========================================================================================== */
+.md-preview {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 36px 140px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--fg);
+}
+.md-preview h1,
+.md-preview h2,
+.md-preview h3,
+.md-preview h4 {
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 1.5em 0 0.5em;
+}
+.md-preview h1 {
+  font-size: 1.85em;
+  margin-top: 0;
+}
+.md-preview h2 {
+  font-size: 1.4em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--line);
+}
+.md-preview h3 {
+  font-size: 1.18em;
+}
+.md-preview p,
+.md-preview ul,
+.md-preview ol,
+.md-preview blockquote,
+.md-preview pre,
+.md-preview table {
+  margin: 0 0 1em;
+}
+.md-preview ul {
+  list-style: disc;
+  padding-left: 1.6em;
+}
+.md-preview ol {
+  list-style: decimal;
+  padding-left: 1.6em;
+}
+.md-preview li {
+  margin: 0.15em 0;
+}
+.md-preview li.task-item {
+  list-style: none;
+  margin-left: -1.4em;
+}
+.md-preview li.task-item input {
+  margin-right: 0.55em;
+  accent-color: var(--accent);
+  cursor: pointer;
+  vertical-align: -1px;
+}
+.md-preview a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent-text) 45%, transparent);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.md-preview a:hover {
+  text-decoration-color: var(--accent-text);
+}
+.md-preview code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--hover);
+  border: 1px solid var(--line);
+  padding: 0.1em 0.36em;
+  border-radius: 4px;
+}
+.md-preview pre {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  overflow-x: auto;
+}
+.md-preview pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+.md-preview blockquote {
+  border-left: 2px solid var(--line-strong);
+  padding-left: 1em;
+  color: var(--muted);
+}
+.md-preview table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+.md-preview th,
+.md-preview td {
+  border: 1px solid var(--line-strong);
+  padding: 6px 12px;
+  text-align: left;
+}
+.md-preview th {
+  background: var(--surface);
+  font-weight: 600;
+}
+.md-preview hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 1.6em 0;
+}
+.md-preview img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+/* ==========================================================================================
+   Document page (Tiptap)
+
+   The page takes its colours from the --page-* tokens, so it follows the app theme: a light
+   sheet in light mode and a dark writing surface in dark mode. Setting
+   data-appearance="paper" pins it to a white sheet in any theme (a user preference).
+
+   These colours exist only on screen. Saved .docx files are generated from the document model
+   in the main process and carry no theme colours, so a document written in dark mode still
+   opens as ordinary black-on-white in Word.
+   ========================================================================================== */
+/* The page is A4 width with 1-inch margins. When the editor is narrower than that, the page and
+   its margins narrow with it instead of scrolling sideways. `cqw` is the editor's width: the
+   scroll area around the page is the size container. */
+.docx-page {
+  --page-pad: clamp(24px, calc((100cqw - 32px) * 0.121), 96px);
+  width: min(794px, calc(100cqw - 32px));
+  min-height: 1123px;
+  margin: 32px auto 96px;
+  padding: var(--page-pad);
+  background: var(--page-bg);
+  color: var(--page-fg);
+  border-radius: 3px;
+  box-shadow: var(--page-edge);
+  transition:
+    background-color var(--dur-slow) ease,
+    color var(--dur-slow) ease;
+}
+.docx-page[data-appearance='paper'] {
+  --page-bg: #ffffff;
+  --page-fg: #1c1c1f;
+  --page-heading: #2f5496;
+  --page-subheading: #1f3763;
+  --page-link: #0b5cc4;
+  --page-border: #9a9aa2;
+  --page-fill: #f2f2f4;
+  --page-placeholder: #9a9aa2;
+  --selection: rgba(94, 106, 210, 0.24);
+  color-scheme: light;
+}
+.docx-page .ProseMirror {
+  outline: none;
+  min-height: 900px;
+  font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  caret-color: var(--page-fg);
+}
+.docx-page .ProseMirror p {
+  margin: 0 0 8pt;
+}
+.docx-page .ProseMirror h1,
+.docx-page .ProseMirror h2,
+.docx-page .ProseMirror h3,
+.docx-page .ProseMirror h4 {
+  font-family: 'Calibri Light', Calibri, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  color: var(--page-heading);
+  line-height: 1.25;
+  margin: 12pt 0 4pt;
+}
+.docx-page .ProseMirror h1 {
+  font-size: 16pt;
+}
+.docx-page .ProseMirror h2 {
+  font-size: 13pt;
+}
+.docx-page .ProseMirror h3 {
+  font-size: 12pt;
+  color: var(--page-subheading);
+}
+.docx-page .ProseMirror h4 {
+  font-size: 11pt;
+  font-style: italic;
+}
+.docx-page .ProseMirror ul {
+  list-style: disc;
+  padding-left: 28px;
+  margin: 0 0 8pt;
+}
+.docx-page .ProseMirror ol {
+  list-style: decimal;
+  padding-left: 28px;
+  margin: 0 0 8pt;
+}
+.docx-page .ProseMirror ul ul {
+  list-style: circle;
+}
+.docx-page .ProseMirror ol ol {
+  list-style: lower-alpha;
+}
+.docx-page .ProseMirror li p {
+  margin: 0 0 2pt;
+}
+.docx-page .ProseMirror a {
+  color: var(--page-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: text;
+}
+.docx-page .ProseMirror blockquote {
+  margin: 0 0 8pt 36px;
+  font-style: italic;
+}
+.docx-page .ProseMirror code {
+  font-family: Consolas, monospace;
+  font-size: 10pt;
+  background: var(--page-fill);
+  padding: 0 3px;
+  border-radius: 3px;
+}
+.docx-page .ProseMirror pre {
+  font-family: Consolas, monospace;
+  font-size: 10pt;
+  background: var(--page-fill);
+  padding: 8px 10px;
+  margin: 0 0 8pt;
+  border-radius: 4px;
+}
+.docx-page .ProseMirror pre code {
+  background: none;
+  padding: 0;
+}
+.docx-page .ProseMirror hr {
+  border: none;
+  border-top: 1px solid var(--page-border);
+  margin: 10pt 0;
+}
+.docx-page .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 4pt 0 8pt;
+  border-radius: 1px;
+}
+.docx-page .ProseMirror img.ProseMirror-selectednode,
+.docx-page .ProseMirror hr.ProseMirror-selectednode {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.docx-page .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  margin: 0 0 8pt;
+}
+.docx-page .ProseMirror td,
+.docx-page .ProseMirror th {
+  border: 1px solid var(--page-border);
+  padding: 4px 7px;
+  vertical-align: top;
+  position: relative;
+  text-align: left;
+}
+.docx-page .ProseMirror th {
+  background: var(--page-fill);
+  font-weight: 700;
+}
+.docx-page .ProseMirror td p,
+.docx-page .ProseMirror th p {
+  margin: 0;
+}
+.docx-page .ProseMirror .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--selection);
+  pointer-events: none;
+}
+.docx-page .ProseMirror-gapcursor::after {
+  border-top-color: var(--page-fg);
+}
+
+/* Flashcard flip: two faces share one grid cell so the card is as tall as the taller face. */
+.flip-scene {
+  perspective: 1400px;
+}
+.flip-face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+}
+
+/* An explicit page break in the document model. On screen it is a labelled divider between
+   pages; the label is generated content, never text in the document. */
+.docx-page .ProseMirror [data-page-break] {
+  position: relative;
+  height: 28px;
+  margin: 14pt calc(-1 * var(--page-pad));
+  border-top: 1px dashed var(--page-border);
+  user-select: none;
+  cursor: default;
+}
+.docx-page .ProseMirror [data-page-break]::after {
+  content: 'Page break';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 10px;
+  background: var(--page-bg);
+  color: var(--page-placeholder);
+  font: 500 10.5px/18px var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.docx-page .ProseMirror [data-page-break].ProseMirror-selectednode {
+  border-top-color: var(--focus);
+}
+.docx-page .ProseMirror [data-page-break].ProseMirror-selectednode::after {
+  color: var(--focus);
+}
+
+/* Imported flashcard text may carry basic, sanitized markup. */
+.card-html ul {
+  list-style: disc;
+  padding-left: 1.4em;
+  text-align: left;
+}
+.card-html ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+  text-align: left;
+}
+.card-html code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* ==========================================================================================
+   Avalanche themes
+
+   Each theme is a complete set of the semantic tokens defined at the top of this file, applied
+   by a class on <html> (`theme-<id>`, set before first paint by the preload script). Themes
+   differ in every surface, line, and text tone, not only in accent. `chrome.background` in
+   src/shared/themes.ts must match each theme's --bg.
+
+   Extra brand tokens used by the logo tile, the Home hero, and selected surfaces:
+     --brand-a / --brand-b   gradient stops for the brand mark
+     --ridge-1..3            mountain silhouette layers, far to near
+     --hero                  the wash behind the Home greeting
+   ========================================================================================== */
+:root,
+.theme-glacier {
+  --brand-a: #2f7fc4;
+  --brand-b: #6fb7ea;
+  --ridge-1: #dfe8f3;
+  --ridge-2: #cfdcec;
+  --ridge-3: #bccde2;
+  --hero: linear-gradient(180deg, #e9f1fa 0%, #f7f9fc 100%);
+}
+
+.theme-avalanche {
+  --bg: #0b1220;
+  --sidebar: #080e1a;
+  --surface: #101a2b;
+  --raised: #152136;
+  --canvas: #070c16;
+  --hover: #16233a;
+  --active: #1d2e4a;
+  --line: #18253b;
+  --line-strong: #263855;
+  --fg: #e8eef8;
+  --muted: #9fb0cb;
+  --subtle: #6a7d9c;
+  --accent: #3d8fd6;
+  --accent-hover: #55a3e6;
+  --accent-fg: #ffffff;
+  --accent-text: #7fc0f5;
+  --accent-soft: rgba(90, 169, 230, 0.16);
+  --danger: #f0736b;
+  --danger-soft: rgba(240, 115, 107, 0.13);
+  --success: #55c493;
+  --warning: #e0b055;
+  --selection: rgba(90, 169, 230, 0.34);
+  --focus: #6bb6f2;
+  --scrollbar: #22334f;
+  --scrollbar-hover: #33496d;
+  --shadow: 0 0 0 1px rgba(160, 200, 255, 0.05), 0 18px 50px rgba(2, 6, 14, 0.62), 0 2px 8px rgba(2, 6, 14, 0.45);
+  --syn-keyword: #9db8ff;
+  --syn-heading: #f2f6fc;
+  --syn-string: #7fd6b0;
+  --syn-comment: #6a7d9c;
+  --syn-link: #7fc0f5;
+  --syn-atom: #e9b98a;
+  --page-bg: #111b2d;
+  --page-fg: #e3e9f4;
+  --page-heading: #9cc9f5;
+  --page-subheading: #86b4e3;
+  --page-link: #7fc0f5;
+  --page-border: #344a6b;
+  --page-fill: #18263d;
+  --page-placeholder: #6a7d9c;
+  --page-edge: 0 0 0 1px #1c2c46, 0 18px 46px rgba(2, 6, 14, 0.55);
+  --pdf-bg: #070c16;
+  --brand-a: #2a6fb5;
+  --brand-b: #8fd0ff;
+  --ridge-1: #101b30;
+  --ridge-2: #142440;
+  --ridge-3: #1a2e50;
+  --hero: linear-gradient(180deg, #10203a 0%, #0b1220 100%);
+  color-scheme: dark;
+}
+
+.theme-glacier {
+  --bg: #f7f9fc;
+  --sidebar: #eef2f8;
+  --surface: #ffffff;
+  --raised: #ffffff;
+  --canvas: #e9eef5;
+  --hover: #e6ecf5;
+  --active: #d8e2f0;
+  --line: #dfe6f0;
+  --line-strong: #c6d2e2;
+  --fg: #1a2333;
+  --muted: #55637a;
+  --subtle: #8391a8;
+  --accent: #2f7fc4;
+  --accent-hover: #2670b0;
+  --accent-fg: #ffffff;
+  --accent-text: #1f66a6;
+  --accent-soft: rgba(47, 127, 196, 0.11);
+  --danger: #c2392f;
+  --danger-soft: rgba(194, 57, 47, 0.09);
+  --success: #1c8556;
+  --warning: #96620a;
+  --selection: rgba(47, 127, 196, 0.24);
+  --focus: #2f7fc4;
+  --scrollbar: #c3cfdf;
+  --scrollbar-hover: #9fb0c8;
+  --shadow: 0 0 0 1px rgba(26, 35, 51, 0.05), 0 12px 34px rgba(26, 45, 80, 0.14), 0 2px 6px rgba(26, 45, 80, 0.07);
+  --syn-keyword: #6a3fc0;
+  --syn-heading: #1a2333;
+  --syn-string: #17764e;
+  --syn-comment: #8391a8;
+  --syn-link: #1f66a6;
+  --syn-atom: #a8551c;
+  --page-bg: #ffffff;
+  --page-fg: #1c2230;
+  --page-heading: #2f5496;
+  --page-subheading: #1f3763;
+  --page-link: #0b5cc4;
+  --page-border: #9aa5b5;
+  --page-fill: #f1f4f8;
+  --page-placeholder: #9aa5b5;
+  --page-edge: 0 0 0 1px rgba(26, 45, 80, 0.08), 0 10px 30px rgba(26, 45, 80, 0.09);
+  --pdf-bg: #dfe6f0;
+  color-scheme: light;
+}
+
+.theme-aurora {
+  --bg: #0e0b1f;
+  --sidebar: #0a0817;
+  --surface: #16112c;
+  --raised: #1c1638;
+  --canvas: #090714;
+  --hover: #1e183b;
+  --active: #29214f;
+  --line: #201a3e;
+  --line-strong: #33295c;
+  --fg: #ece9f8;
+  --muted: #a9a2c8;
+  --subtle: #746c98;
+  --accent: #1f9e8a;
+  --accent-hover: #2bb39d;
+  --accent-fg: #ffffff;
+  --accent-text: #5fdcc4;
+  --accent-soft: rgba(62, 201, 176, 0.15);
+  --danger: #f27a8e;
+  --danger-soft: rgba(242, 122, 142, 0.13);
+  --success: #5fdcc4;
+  --warning: #e6b866;
+  --selection: rgba(140, 110, 240, 0.38);
+  --focus: #5fdcc4;
+  --scrollbar: #2e2554;
+  --scrollbar-hover: #453979;
+  --shadow: 0 0 0 1px rgba(170, 150, 255, 0.06), 0 18px 50px rgba(4, 2, 14, 0.66), 0 2px 8px rgba(4, 2, 14, 0.45);
+  --syn-keyword: #b7a2ff;
+  --syn-heading: #f4f1fd;
+  --syn-string: #6fe0c8;
+  --syn-comment: #746c98;
+  --syn-link: #5fdcc4;
+  --syn-atom: #f0a8c4;
+  --page-bg: #17122e;
+  --page-fg: #e6e2f5;
+  --page-heading: #b9a8ff;
+  --page-subheading: #a391ee;
+  --page-link: #5fdcc4;
+  --page-border: #3d3168;
+  --page-fill: #201a3f;
+  --page-placeholder: #746c98;
+  --page-edge: 0 0 0 1px #261e49, 0 18px 46px rgba(4, 2, 14, 0.6);
+  --pdf-bg: #090714;
+  --brand-a: #5b46c9;
+  --brand-b: #3ec9b0;
+  --ridge-1: #151030;
+  --ridge-2: #1b1440;
+  --ridge-3: #1a2a4c;
+  --hero: linear-gradient(180deg, #1a1340 0%, #0e0b1f 100%);
+  color-scheme: dark;
+}
+
+.theme-forest {
+  --bg: #0c1512;
+  --sidebar: #09100e;
+  --surface: #121d19;
+  --raised: #172520;
+  --canvas: #070d0b;
+  --hover: #182721;
+  --active: #20342c;
+  --line: #19271f;
+  --line-strong: #2a3d34;
+  --fg: #e6ede8;
+  --muted: #a3b3aa;
+  --subtle: #6f8177;
+  --accent: #3f8a61;
+  --accent-hover: #4d9d71;
+  --accent-fg: #ffffff;
+  --accent-text: #84c9a0;
+  --accent-soft: rgba(111, 177, 138, 0.15);
+  --danger: #ee7b6c;
+  --danger-soft: rgba(238, 123, 108, 0.13);
+  --success: #84c9a0;
+  --warning: #d9b25c;
+  --selection: rgba(111, 177, 138, 0.32);
+  --focus: #84c9a0;
+  --scrollbar: #24372e;
+  --scrollbar-hover: #375044;
+  --shadow: 0 0 0 1px rgba(180, 220, 195, 0.05), 0 18px 50px rgba(2, 8, 5, 0.62), 0 2px 8px rgba(2, 8, 5, 0.45);
+  --syn-keyword: #9fcfb0;
+  --syn-heading: #f1f5f2;
+  --syn-string: #d6c98a;
+  --syn-comment: #6f8177;
+  --syn-link: #84c9a0;
+  --syn-atom: #e0a97c;
+  --page-bg: #131f1a;
+  --page-fg: #e1e8e3;
+  --page-heading: #9bd3b1;
+  --page-subheading: #86bd9c;
+  --page-link: #84c9a0;
+  --page-border: #35493f;
+  --page-fill: #1a2a23;
+  --page-placeholder: #6f8177;
+  --page-edge: 0 0 0 1px #1d2d25, 0 18px 46px rgba(2, 8, 5, 0.55);
+  --pdf-bg: #070d0b;
+  --brand-a: #2f6b4b;
+  --brand-b: #a9d6b8;
+  --ridge-1: #101c17;
+  --ridge-2: #14251e;
+  --ridge-3: #1a3027;
+  --hero: linear-gradient(180deg, #13261e 0%, #0c1512 100%);
+  color-scheme: dark;
+}
+
+.theme-obsidian {
+  --bg: #0a0a0a;
+  --sidebar: #060606;
+  --surface: #121212;
+  --raised: #181818;
+  --canvas: #050505;
+  --hover: #1a1a1a;
+  --active: #242424;
+  --line: #1c1c1c;
+  --line-strong: #2e2e2e;
+  --fg: #ededed;
+  --muted: #a0a0a0;
+  --subtle: #6b6b6b;
+  --accent: #e4e4e4;
+  --accent-hover: #ffffff;
+  --accent-fg: #0a0a0a;
+  --accent-text: #f2f2f2;
+  --accent-soft: rgba(255, 255, 255, 0.09);
+  --danger: #f07167;
+  --danger-soft: rgba(240, 113, 103, 0.13);
+  --success: #7fcf9f;
+  --warning: #d9b25c;
+  --selection: rgba(255, 255, 255, 0.2);
+  --focus: #f2f2f2;
+  --scrollbar: #2a2a2a;
+  --scrollbar-hover: #444444;
+  --shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 18px 50px rgba(0, 0, 0, 0.75), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --syn-keyword: #d0d0d0;
+  --syn-heading: #ffffff;
+  --syn-string: #b5c9b5;
+  --syn-comment: #6b6b6b;
+  --syn-link: #f2f2f2;
+  --syn-atom: #c9b9a0;
+  --page-bg: #131313;
+  --page-fg: #e6e6e6;
+  --page-heading: #ffffff;
+  --page-subheading: #d6d6d6;
+  --page-link: #cfe0ff;
+  --page-border: #3a3a3a;
+  --page-fill: #1c1c1c;
+  --page-placeholder: #6b6b6b;
+  --page-edge: 0 0 0 1px #202020, 0 18px 46px rgba(0, 0, 0, 0.6);
+  --pdf-bg: #050505;
+  --brand-a: #2a2a2a;
+  --brand-b: #f2f2f2;
+  --ridge-1: #101010;
+  --ridge-2: #161616;
+  --ridge-3: #1e1e1e;
+  --hero: linear-gradient(180deg, #151515 0%, #0a0a0a 100%);
+  color-scheme: dark;
+}
+
+.theme-alpenglow {
+  --bg: #17111c; --sidebar: #120d17; --surface: #1f1626; --raised: #261b2e; --canvas: #0f0a13;
+  --hover: #281d30; --active: #35263f; --line: #281d30; --line-strong: #3d2d48;
+  --fg: #f3e9ee; --muted: #b8a3b8; --subtle: #80708a;
+  --accent: #c8604b; --accent-hover: #d9735e; --accent-fg: #ffffff; --accent-text: #f2a08c; --accent-soft: rgba(232, 132, 111, 0.16);
+  --danger: #f27a8e; --danger-soft: rgba(242, 122, 142, 0.13); --success: #7fcfa8; --warning: #e8b96a;
+  --selection: rgba(232, 132, 111, 0.32); --focus: #f2a08c; --scrollbar: #382a42; --scrollbar-hover: #524060;
+  --shadow: 0 0 0 1px rgba(255, 200, 190, 0.05), 0 18px 50px rgba(8, 3, 12, 0.66), 0 2px 8px rgba(8, 3, 12, 0.45);
+  --syn-keyword: #d7a6e8; --syn-heading: #fbf3f6; --syn-string: #f2c08c; --syn-comment: #80708a; --syn-link: #f2a08c; --syn-atom: #9fd0e8;
+  --page-bg: #20172a; --page-fg: #efe4ea; --page-heading: #f2a892; --page-subheading: #dd9480; --page-link: #f2a08c;
+  --page-border: #473552; --page-fill: #2a1e34; --page-placeholder: #80708a; --page-edge: 0 0 0 1px #2c2036, 0 18px 46px rgba(8, 3, 12, 0.6);
+  --pdf-bg: #0f0a13; --brand-a: #6a3d7a; --brand-b: #f2a08c;
+  --ridge-1: #1e1526; --ridge-2: #2a1b30; --ridge-3: #3a2236;
+  --hero: linear-gradient(180deg, #3a1f33 0%, #17111c 100%);
+  color-scheme: dark;
+}
+
+.theme-summit {
+  --bg: #fbf8f3; --sidebar: #f3eee6; --surface: #ffffff; --raised: #ffffff; --canvas: #efe9df;
+  --hover: #efe8dd; --active: #e4dacb; --line: #e8e0d3; --line-strong: #d3c8b7;
+  --fg: #2a2520; --muted: #6b6156; --subtle: #978b7d;
+  --accent: #b8551f; --accent-hover: #a34a19; --accent-fg: #ffffff; --accent-text: #a04716; --accent-soft: rgba(194, 98, 45, 0.11);
+  --danger: #b93226; --danger-soft: rgba(185, 50, 38, 0.09); --success: #2a7a4f; --warning: #8f5e06;
+  --selection: rgba(194, 98, 45, 0.22); --focus: #b8551f; --scrollbar: #d3c8b7; --scrollbar-hover: #b3a694;
+  --shadow: 0 0 0 1px rgba(42, 37, 32, 0.05), 0 12px 34px rgba(80, 55, 30, 0.14), 0 2px 6px rgba(80, 55, 30, 0.07);
+  --syn-keyword: #8a3fa8; --syn-heading: #2a2520; --syn-string: #2a7a4f; --syn-comment: #978b7d; --syn-link: #a04716; --syn-atom: #1f6f8f;
+  --page-bg: #fffdf9; --page-fg: #241f1a; --page-heading: #2f5496; --page-subheading: #1f3763; --page-link: #0b5cc4;
+  --page-border: #a89c8c; --page-fill: #f4eee4; --page-placeholder: #a89c8c; --page-edge: 0 0 0 1px rgba(80, 55, 30, 0.08), 0 10px 30px rgba(80, 55, 30, 0.09);
+  --pdf-bg: #e8e0d3; --brand-a: #c2622d; --brand-b: #f2c078;
+  --ridge-1: #f3e6d3; --ridge-2: #ecd9c2; --ridge-3: #e2c9ad;
+  --hero: linear-gradient(180deg, #fbe6cf 0%, #fbf8f3 100%);
+  color-scheme: light;
+}
+
+.theme-crevasse {
+  --bg: #07171b; --sidebar: #051215; --surface: #0c2126; --raised: #112a30; --canvas: #040e11;
+  --hover: #122c32; --active: #193a41; --line: #122a30; --line-strong: #1f4047;
+  --fg: #e2f1f2; --muted: #96b6ba; --subtle: #5f8388;
+  --accent: #14808b; --accent-hover: #1a95a1; --accent-fg: #ffffff; --accent-text: #62d6e0; --accent-soft: rgba(53, 198, 211, 0.15);
+  --danger: #f07a70; --danger-soft: rgba(240, 122, 112, 0.13); --success: #6fd3a8; --warning: #e0b860;
+  --selection: rgba(53, 198, 211, 0.3); --focus: #62d6e0; --scrollbar: #1d3d44; --scrollbar-hover: #2c565f;
+  --shadow: 0 0 0 1px rgba(150, 230, 240, 0.05), 0 18px 50px rgba(1, 8, 10, 0.66), 0 2px 8px rgba(1, 8, 10, 0.45);
+  --syn-keyword: #8fc7f2; --syn-heading: #f0f8f9; --syn-string: #8fe0b8; --syn-comment: #5f8388; --syn-link: #62d6e0; --syn-atom: #e8c08a;
+  --page-bg: #0d2329; --page-fg: #dcecee; --page-heading: #7fdbe4; --page-subheading: #68c3cc; --page-link: #62d6e0;
+  --page-border: #29505a; --page-fill: #123037; --page-placeholder: #5f8388; --page-edge: 0 0 0 1px #153239, 0 18px 46px rgba(1, 8, 10, 0.6);
+  --pdf-bg: #040e11; --brand-a: #0f5f6b; --brand-b: #8fe8ee;
+  --ridge-1: #0b2227; --ridge-2: #0f2d33; --ridge-3: #143a42;
+  --hero: linear-gradient(180deg, #0f343b 0%, #07171b 100%);
+  color-scheme: dark;
+}
+
+/* Optional accent override. Each accent has a fill that carries white text and a text tone
+   chosen separately for dark and light themes, so no combination loses contrast. */
+.accent-ice {
+  --accent: #2f7fc4;
+  --accent-hover: #3f90d6;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(79, 159, 224, 0.15);
+}
+.accent-teal {
+  --accent: #1f8f7d;
+  --accent-hover: #27a591;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(47, 181, 160, 0.15);
+}
+.accent-violet {
+  --accent: #6b5bd6;
+  --accent-hover: #7c6ce6;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(139, 124, 240, 0.16);
+}
+.accent-amber {
+  --accent: #a86a12;
+  --accent-hover: #bd7a1c;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(217, 150, 47, 0.16);
+}
+.accent-rose {
+  --accent: #c0496b;
+  --accent-hover: #d25a7c;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(224, 104, 138, 0.15);
+}
+.dark.accent-ice { --accent-text: #7fc0f5; --focus: #7fc0f5; }
+.dark.accent-teal { --accent-text: #5fdcc4; --focus: #5fdcc4; }
+.dark.accent-violet { --accent-text: #b3a8ff; --focus: #b3a8ff; }
+.dark.accent-amber { --accent-text: #ecb766; --focus: #ecb766; }
+.dark.accent-rose { --accent-text: #f29ab4; --focus: #f29ab4; }
+html:not(.dark).accent-ice { --accent-text: #1f66a6; --focus: #2f7fc4; }
+html:not(.dark).accent-teal { --accent-text: #14705f; --focus: #1f8f7d; }
+html:not(.dark).accent-violet { --accent-text: #5444bd; --focus: #6b5bd6; }
+html:not(.dark).accent-amber { --accent-text: #85520a; --focus: #a86a12; }
+html:not(.dark).accent-rose { --accent-text: #a23357; --focus: #c0496b; }
+
+/* The brand mark's tile and the selected navigation item carry the theme's one gradient. */
+.brand-tile {
+  background: linear-gradient(145deg, var(--brand-a), var(--brand-b));
+}
+.hero-wash {
+  background: var(--hero);
+}
+/* A ridgeline used as a quiet illustration: it fades out towards both ends. */
+.ridge-fade {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+}
+
+/* Writing help in the document editor. */
+.word-completion {
+  color: var(--subtle);
+  pointer-events: none;
+  user-select: none;
+}
+.writing-issue {
+  text-decoration: underline wavy;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.writing-issue-grammar { text-decoration-color: var(--accent-text); }
+.writing-issue-punctuation { text-decoration-color: var(--warning); }
+.writing-issue-style { text-decoration-color: var(--subtle); text-decoration-style: dotted; }

@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build output
+out/
+dist/
+release/
+*.tsbuildinfo
+
+# Test output
+test-results/
+playwright-report/
+coverage/
+
+# Local tooling and editor state (never part of the project)
+.claude/
+.vscode/
+.idea/
+*.code-workspace
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# OS and temporary files
+.tmp/
+*.log
+Thumbs.db
+Desktop.ini
+.DS_Store
+# Private publishing notes
+GITHUB_SETUP.md
+
+# Tests, test tooling, and screenshots stay local
+tests/
+docs/screenshots/
+playwright.config.ts
+vitest.config.ts
+tools/run-vitest.mjs
+tools/measure-startup.mjs

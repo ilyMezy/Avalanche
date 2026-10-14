@@ -1,0 +1,102 @@
+Avalanche Source-Available License, version 1.0
+
+Copyright (c) 2026 ilymezy. All rights reserved.
+
+This is a source-available license. It is not an open-source license: the
+source code is published so that people can read it, run it for themselves,
+and contribute improvements to this project, but not so that they can
+publish their own versions of it.
+
+1. Definitions
+
+   "The Software" means the source code, assets, and documentation in this
+   repository, and any build made from them.
+
+   "The Project" means the official Avalanche repository maintained by the
+   copyright holder.
+
+   "The Owner" means the copyright holder named above.
+
+2. What you may do
+
+   Provided you comply with this license, you may:
+
+   a. read and study the Software;
+
+   b. download, build, and run the Software on your own devices for your own
+      personal, educational, or internal use;
+
+   c. modify the Software privately on your own devices, for your own use
+      under 2(b) or in order to prepare a contribution under section 4;
+
+   d. keep a copy of the repository on a code-hosting service, including a
+      fork made with that service's fork feature, only as far as needed to
+      prepare and submit contributions to the Project.
+
+3. What you may not do
+
+   Without prior written permission from the Owner, you may not:
+
+   a. distribute, publish, sublicense, sell, rent, or otherwise make the
+      Software, or any modified version or build of it, available to anyone
+      else, whether for payment or for free;
+
+   b. publish or operate a modified or renamed version of the Software, or a
+      product or service derived from a substantial part of it;
+
+   c. use the Software, or a modified version of it, as the basis of a
+      competing or separately maintained project;
+
+   d. remove or alter any copyright, license, or attribution notice;
+
+   e. use the name "Avalanche", its logo, or its icons to identify anything
+      other than the unmodified Software, except to refer to the Project.
+
+4. Contributions
+
+   Contributions are welcome. By submitting a contribution to the Project
+   (for example a pull request, patch, or suggestion that includes code,
+   text, or assets), you:
+
+   a. confirm that the contribution is your own work, or that you have the
+      right to submit it under these terms;
+
+   b. grant the Owner a perpetual, worldwide, non-exclusive, royalty-free,
+      irrevocable license to use, reproduce, modify, distribute, sublicense,
+      and relicense your contribution as part of the Software, under this
+      license or any other terms the Owner chooses;
+
+   c. keep the copyright in your contribution; this license takes no
+      ownership from you.
+
+   The Owner decides which contributions are accepted.
+
+5. Third-party components
+
+   The Software depends on third-party packages that are distributed under
+   their own licenses. Those licenses govern those packages; nothing in this
+   license restricts rights you have under them.
+
+6. Termination
+
+   Your rights under this license end automatically if you breach it. If
+   your rights end, you must stop using the Software and delete your copies.
+
+7. No warranty
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+8. Limitation of liability
+
+   IN NO EVENT SHALL THE OWNER OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM,
+   DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR
+   OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE
+   USE OF OR OTHER DEALINGS IN THE SOFTWARE.
+
+9. Other permissions
+
+   Anything this license does not expressly permit is reserved. To ask for a
+   permission that is not granted here, contact the Owner through the
+   Project's issue tracker.

@@ -1,0 +1,54 @@
+appId: com.offlineworkspace.app
+productName: Avalanche
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**
+  - drizzle/**
+  - package.json
+asarUnpack:
+  - node_modules/better-sqlite3/**
+npmRebuild: true
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  artifactName: Avalanche-Setup-${version}.${ext}
+  shortcutName: Avalanche
+mac:
+  icon: build/icon.png
+  category: public.app-category.productivity
+  # Ad-hoc signature only: the app is not signed with an Apple Developer ID yet, so macOS asks
+  # people to confirm it the first time (see the Mac note in the README).
+  identity: '-'
+  hardenedRuntime: false
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  artifactName: Avalanche-${version}-mac-${arch}.${ext}
+linux:
+  icon: build/icon.png
+  category: Office
+  maintainer: ilymezy
+  synopsis: A private, offline workspace for studying and writing
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  artifactName: Avalanche-${version}-linux-${arch}.${ext}
+# Where the installed app looks for newer versions (see "Releasing" in the README). Building never
+# uploads anything: the dist script passes --publish never.
+publish:
+  provider: github
+  owner: ilymezy
+  repo: Avalanche
+  releaseType: release
