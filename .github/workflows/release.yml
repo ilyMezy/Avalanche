@@ -1,0 +1,116 @@
+# Builds Avalanche for Windows, macOS, and Linux when a version tag is pushed, and attaches all of
+# it to one draft release. Each system is built from its own branch (windows, mac, linux), so
+# every branch must be at the version in the tag. Push tags from the windows branch.
+# Publish the draft on GitHub once the release notes are written.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  # The draft is created once, first, so the three builds add to the same release.
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view "${{ github.ref_name }}" --repo "${{ github.repository }}" >/dev/null 2>&1 ||
+            gh release create "${{ github.ref_name }}" --repo "${{ github.repository }}" --draft --title "Avalanche ${{ github.ref_name }}" --notes "Write the release notes here before publishing."
+
+  windows:
+    needs: prepare
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Check that this branch has the version being released
+        shell: bash
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          if [ "$version" != "${{ github.ref_name }}" ]; then
+            echo "This branch is at $version but the tag is ${{ github.ref_name }}. Raise the version on this branch first."
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npx electron-vite build
+
+      # Bash, because PowerShell splits -c.publish.releaseType=draft into two arguments.
+      - name: Build and attach to the draft release
+        shell: bash
+        run: npx electron-builder --win --x64 --publish always -c.publish.releaseType=draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  mac:
+    needs: prepare
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: mac
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Check that this branch has the version being released
+        shell: bash
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          if [ "$version" != "${{ github.ref_name }}" ]; then
+            echo "This branch is at $version but the tag is ${{ github.ref_name }}. Raise the version on this branch first."
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npx electron-vite build
+
+      - name: Build and attach to the draft release
+        run: npx electron-builder --mac --publish always -c.publish.releaseType=draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  linux:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: linux
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Check that this branch has the version being released
+        shell: bash
+        run: |
+          version="v$(node -p "require('./package.json').version")"
+          if [ "$version" != "${{ github.ref_name }}" ]; then
+            echo "This branch is at $version but the tag is ${{ github.ref_name }}. Raise the version on this branch first."
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npx electron-vite build
+
+      - name: Build and attach to the draft release
+        run: npx electron-builder --linux --publish always -c.publish.releaseType=draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
